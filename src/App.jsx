@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Card from "./assets/Components/Card";
+import Card from "./Components/Card";
 
 const App = () => {
   const [city, setCity] = useState("");

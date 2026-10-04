@@ -135,28 +135,28 @@ export const buildInsights = (w) => {
   else if (f < 14) wear = "Jacket or warm layers recommended.";
   else if (f < 22) wear = "A light layer or hoodie will do.";
   else if (f > 33) wear = "Very hot. Breathable clothes and a hat.";
-  out.push({ icon: "👕", title: "What to wear", text: wear });
+  out.push({ icon: "shirt", title: "What to wear", text: wear });
 
   // worst rain chance over today / next 12h
   const maxRain = Math.max(today.rain, ...hourly.slice(0, 12).map((h) => h.rain));
   out.push({
-    icon: maxRain >= 50 || isWet(now.code) ? "☂️" : "😎",
+    icon: maxRain >= 50 || isWet(now.code) ? "umbrella" : "sun",
     title: "Rain check",
     text: maxRain >= 50 || isWet(now.code) ? `${maxRain}% chance of rain. Carry an umbrella.` : "No umbrella needed today.",
   });
 
-  if (today.uv >= 3) out.push({ icon: "🧴", title: "Sun protection", text: `UV peaks at ${Math.round(today.uv)}. Use SPF ${today.uv >= 6 ? "50" : "30"} outdoors.` });
-  if (aqi != null && aqi > 100) out.push({ icon: "😷", title: "Air quality", text: "Air is unhealthy. Limit outdoor exercise or wear an N95." });
+  if (today.uv >= 3) out.push({ icon: "uv", title: "Sun protection", text: `UV peaks at ${Math.round(today.uv)}. Use SPF ${today.uv >= 6 ? "50" : "30"} outdoors.` });
+  if (aqi != null && aqi > 100) out.push({ icon: "air", title: "Air quality", text: "Air is unhealthy. Limit outdoor exercise or wear an N95." });
 
   // Best outdoor window: daylight hours closest to a comfy 22°C with the least rain
   const cand = hourly.filter((h) => h.day).map((h) => ({ h, s: Math.abs(h.temp - 22) + h.rain * 0.3 }));
   if (cand.length) {
     const best = cand.sort((a, b) => a.s - b.s)[0].h;
-    out.push({ icon: "🏃", title: "Best outdoor window", text: `Around ${hourLabel(best.time)} (${Math.round(best.temp)}°C, ${best.rain}% rain).` });
+    out.push({ icon: "walk", title: "Best outdoor window", text: `Around ${hourLabel(best.time)} (${Math.round(best.temp)}°C, ${best.rain}% rain).` });
   }
 
   // laundry rule: low humidity and no rain around
   const dry = now.humidity < 60 && !isWet(now.code) && maxRain < 30;
-  out.push({ icon: "🧺", title: "Laundry", text: dry ? "Great day to hang clothes outside." : "Dry them indoors today." });
+  out.push({ icon: "laundry", title: "Laundry", text: dry ? "Great day to hang clothes outside." : "Dry them indoors today." });
   return out;
 };

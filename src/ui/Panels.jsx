@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { FiStar, FiWind, FiDroplet, FiSun, FiSunrise, FiSunset, FiCloud, FiActivity } from "react-icons/fi";
+import { LuShirt, LuUmbrella, LuSun, LuSunMedium, LuShieldAlert, LuFootprints, LuWashingMachine } from "react-icons/lu";
 import WeatherIcon from "./WeatherIcon";
 import { Tilt } from "./fx";
 import { useCountUp } from "./useCountUp";
 import { toUnit, toWind, compass, hourLabel, clock, describe, aqiInfo } from "../lib/weather";
+
+// insight icon names (set in lib/weather.js) -> icon components
+const TIP_ICONS = { shirt: LuShirt, umbrella: LuUmbrella, sun: LuSun, uv: LuSunMedium, air: LuShieldAlert, walk: LuFootprints, laundry: LuWashingMachine };
 
 // big top card: city, temp, condition, star to save. tilts with the mouse
 export const Hero = ({ place, w, unit, saved, onSave }) => {
@@ -107,10 +111,10 @@ export const Daily = ({ days, unit }) => {
             <div className={`grid transition-all duration-300 ${open === i ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
               <div className="overflow-hidden">
                 <div className="flex justify-between text-xs opacity-80 pb-2 px-2">
-                  <span>🌅 {clock(d.sunrise)}</span>
-                  <span>🌇 {clock(d.sunset)}</span>
-                  <span>UV {Math.round(d.uv)}</span>
-                  <span>💧 {d.rain}%</span>
+                  <span className="flex items-center gap-1"><FiSunrise /> {clock(d.sunrise)}</span>
+                  <span className="flex items-center gap-1"><FiSunset /> {clock(d.sunset)}</span>
+                  <span className="flex items-center gap-1"><FiSun /> UV {Math.round(d.uv)}</span>
+                  <span className="flex items-center gap-1"><FiDroplet /> {d.rain}%</span>
                 </div>
               </div>
             </div>
@@ -138,9 +142,9 @@ export const SunArc = ({ w }) => {
         <circle className="sun-glow" cx={x} cy={y} r="10" fill="#fde68a" />
       </svg>
       <div className="flex justify-between text-sm opacity-80">
-        <span>↑ {clock(d.sunrise)}</span>
+        <span className="flex items-center gap-1"><FiSunrise /> {clock(d.sunrise)}</span>
         <span>{p > 0 && p < 1 ? "Sun is up" : "Sun is down"}</span>
-        <span>↓ {clock(d.sunset)}</span>
+        <span className="flex items-center gap-1"><FiSunset /> {clock(d.sunset)}</span>
       </div>
     </section>
   );
@@ -177,12 +181,15 @@ export const Insights = ({ items }) => (
   <section className="glass rounded-3xl p-5">
     <h3 className="text-xs uppercase tracking-widest opacity-70 mb-3">Today, in plain English</h3>
     <div className="grid sm:grid-cols-2 gap-3">
-      {items.map((it) => (
-        <div key={it.title} className="card flex gap-3 items-start rounded-2xl bg-white/10 p-4">
-          <span className="text-2xl">{it.icon}</span>
-          <div><p className="font-semibold text-sm">{it.title}</p><p className="text-sm opacity-80">{it.text}</p></div>
-        </div>
-      ))}
+      {items.map((it) => {
+        const Icon = TIP_ICONS[it.icon] || LuSun;
+        return (
+          <div key={it.title} className="card flex gap-3 items-start rounded-2xl bg-white/10 p-4">
+            <span className="grid place-items-center w-10 h-10 shrink-0 rounded-xl bg-white/15"><Icon size={20} /></span>
+            <div><p className="font-semibold text-sm">{it.title}</p><p className="text-sm opacity-80">{it.text}</p></div>
+          </div>
+        );
+      })}
     </div>
   </section>
 );

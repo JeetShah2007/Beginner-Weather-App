@@ -71,7 +71,10 @@ const App = () => {
       <main className="relative z-10 max-w-4xl mx-auto px-4 py-8 space-y-4">
         {/* top bar: logo + °C/°F toggle */}
         <header className="flex items-center justify-between">
-          <h1 className="text-xl font-extrabold tracking-tight">Skye<span className="opacity-60">.</span></h1>
+          <h1 className="flex items-center gap-2 text-xl font-extrabold tracking-tight">
+  <img src="/favicon.svg" alt="" className="w-8 h-8 rounded-xl" />
+  Skye
+</h1>
           <div className="flex items-center gap-2">
             {/* refetch the current city, icon spins while loading */}
             <button onClick={() => setPlace({ ...place })} aria-label="Refresh" className="glass rounded-full p-2.5">
